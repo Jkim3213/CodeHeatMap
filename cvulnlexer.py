@@ -135,13 +135,18 @@ tokens += list(kw.values())
 def TOK(someText):
     lexer = lex.lex()
     lexer.input(someText)
-    x = list(lexer)
+    raw_tokens = list(lexer)
     d = {}
     zip_tokens = {tokens[i]: i for i in range(len(tokens))}
-    for i in range(len(x) // 500 + 1):
-        print('Hi there')
-        d[(x[500 * i].lineno, x[500 * i].lexpos)] = [zip_tokens[tok.type] + 1 for tok in x[500 * i: min(500 * (i + 1), len(x))]]
-        d[(x[500 * i].lineno, x[500 * i].lexpos)] += (500 - len(d[(x[500 * i].lineno, x[500  * i].lexpos)])) * [0]
+    page_size = 500
+    master_list = [raw_tokens[n:n+page_size] for n in range(0, len(raw_tokens), page_size)]
+    for page in master_list:
+        key = (page[0].lineno, page[0].lexpos)#x,y
+        
+        token_int_list = [zip_tokens[tok.type] + 1 for tok in page]
+        for j in range(len(token_int_list), 500):
+            token_int_list.append(0)
+        d[key] = token_int_list
 
     return d
 
@@ -155,7 +160,7 @@ def TOKfile(label, someText, fileName):
 
     with open(fileName, "ab") as f:
         line += struct.pack('b' * len(dick[list(dick.keys())[0]]), *dick[list(dick.keys())[0]])
-        f.write(line + '\n')
+        f.write(line + b'\n')
 
     return
 
