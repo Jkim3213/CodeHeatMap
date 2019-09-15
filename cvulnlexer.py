@@ -135,8 +135,74 @@ def TOK(someText):
     lexer.input(someText)
     x = list(lexer)
     d = {}
-    for i in range(len(x) // 500):
-        d[(x[500 * i].lineno, x[500  * i].lexpos)] = [zip_tokens[tok.type] + 1 for tok in x[500 * i: min(500 * (i + 1), len(x))]]
-        d[(x[500 * i].lineno, x[500  * i].lexpos)] += (500 - len(d[(x[500 * i].lineno, x[500  * i].lexpos)]))  * [0]
+    zip_tokens = {tokens[i]: i for i in range(len(tokens))}
+    for i in range(len(x) // 500 + 1):
+        print('Hi there')
+        d[(x[500 * i].lineno, x[500 * i].lexpos)] = [zip_tokens[tok.type] + 1 for tok in x[500 * i: min(500 * (i + 1), len(x))]]
+        d[(x[500 * i].lineno, x[500 * i].lexpos)] += (500 - len(d[(x[500 * i].lineno, x[500  * i].lexpos)])) * [0]
 
     return d
+
+# s = """
+# #include<iostream>
+# #include<string>
+# using namespace std;
+# class User {
+#     public:
+#         User(string username, int password) {
+#             this->username = username;
+#             this->password = password;
+#             numUsers++;
+#             newestUser = *this;
+#         }
+#         public User() {
+#             cout << "wowowowow"
+#         }
+#         static void setDisplayNewest(bool displayNewest) {
+#             User::displayNewest = displayNewest;
+#         }
+#         static int getNumUsers() {
+#             return User::numUsers;
+#         }
+#         void getUsername() {
+#             std::string << " message " << 1999;
+#         }
+#         String getUsername() {
+#             return this->username;
+#         }
+#         static string getWelcomeMessage() {
+#             if (User::numUsers == 0) {
+#                 return "No user yet\n";
+#             } else if (User::displayNewest){
+#                 return newestUser.username + " has recently joined. Welcome him\n";
+#             } else {
+#                 return "Welcome! There" + numUsers + " people in the server\n";
+#             }
+#         }
+#         void changePassword(string usernameInput, int passwordInput, int newPassword) {
+#             if (validLogin(usernameInput, passwordInput)) {
+#                 this->password = newPassword;
+#             }
+#         }
+#         boolean validLogin(string usernameInput, int passwordInput) {
+#             return usernameInput == this->username && passwordInput == this->password;
+#         }
+#     private:
+#         string username;
+#         password;
+#         static int numUsers
+#         static User newestUser;
+#         static bool displayNewest;
+# };
+# int User::numUsers = 0;
+# User User::newestUser = NULL;
+# bool User::displayNewest = false;
+# int main() {
+#     std::string cool = "wowie" << 17 << "\n";
+#     //User User1(12, "1331");
+#     //User tim;
+#     int tim;
+#     std::cout << cool;
+# }
+# """
+# print(TOK(s))
