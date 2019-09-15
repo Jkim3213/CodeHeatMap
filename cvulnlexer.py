@@ -143,6 +143,14 @@ def TOK(someText):
 
     return d
 
+def TOKfile(someText, fileName):
+    dick = TOK(someText)
+    with open(fileName, "b+") as f:
+        line = b''.join(dick[dick.keys()[0]])
+        f.write(line + '\n')
+
+    return
+
 # s = """
 # #include<iostream>
 # #include<string>
