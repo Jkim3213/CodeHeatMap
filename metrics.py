@@ -7,8 +7,9 @@ import random
 def main(key, file_name, num_programs):
     os.system(f'rm master.txt master_master_{key}.tok')
     f = h5py.File(file_name,'r')
+    print(len(f['functionSource']))
     rand_list = random.sample(range(len(f['functionSource'])), num_programs)
-
+    print(rand_list)
     for i in rand_list:
         program = f['functionSource'][i]
         file = open('place_holder.c', 'w')
@@ -39,7 +40,7 @@ def main(key, file_name, num_programs):
 
 
 main('train', f'VDISC_train.hdf5', 1000)
-main('test', f'VDISC_train.hdf5', 100)
-main('validate', f'VDISC_train.hdf5', 100)
+main('test', f'VDISC_test.hdf5', 100)
+main('validate', f'VDISC_validate.hdf5', 100)
 
 print('done')
