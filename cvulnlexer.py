@@ -6,6 +6,8 @@ Created on Sat Sep 14 19:29:37 2019
 """
 
 import ply.lex as lex #library import
+import struct
+
 # List of token names.   This is always required
 tokens = [
 'PLUS' ,        # +                                 # OPERATORS #
@@ -152,7 +154,7 @@ def TOKfile(label, someText, fileName):
         line = b'\x00'
 
     with open(fileName, "ab") as f:
-        line += b''.join(dick[list(dick.keys())[0]])
+        line += struct.pack('b' * len(dick[list(dick.keys())[0]]), *dick[list(dick.keys())[0]])
         f.write(line + '\n')
 
     return
