@@ -152,7 +152,7 @@ def TOKfile(label, someText, fileName):
         line = b'\x00'
 
     with open(fileName, "b+") as f:
-        line += b''.join(dick[dick.keys()[0]])
+        line += b''.join(dick[list(dick.keys())[0]])
         f.write(line + '\n')
 
     return
