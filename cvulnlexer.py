@@ -37,9 +37,12 @@ tokens = [
 'FLOAT',       # dbl
 'CHAR',     #char
 'STRING',       #str
+'ID',
+'KW',
 
 'SEMI',     #;
-'COMMENT',  # --
+'COMMENTML',  # --
+'COMMENTSL'
 ]
 
 t_PLUS    = r'\+'
@@ -63,7 +66,8 @@ t_DOUBLEEQUAL = r'\=\='
 t_NE = r'\!\='
 t_AND = r'\&'
 t_OR = r'\|'
-t_COMMENT = r'\#.*'
+t_COMMENTML = r'/\*.*'
+t_COMMENTSL = r'//.*'
 t_SEMI = r';'
 t_ignore  = ' \t'
 
@@ -98,24 +102,107 @@ def t_error(t):
     
 def t_ID(t):
     r'[a-zA-Z_][a-zA-Z0-9]*'
+    t.type = kw.get(t.value,'ID')    # Check for keywords
     return t
     
-kw = {'if': 'IF', 'then': 'THEN', 'else': 'ELSE', 'while': 'WHILE', 'gets': 'GETS', 'scanf': 'SCANF', 'malloc': 'MALLOC', 'printf': 'PRINTF'}
-
-tokens += list(kw.values())
+kw = {'if': 'IF', 'then': 'THEN', 'else': 'ELSE', 'while': 'WHILE', 'gets': 'GETS', 'fgets': 'FGETS', 'getline': 'GETLINE', 'read': 'READ', 'scanf': 'SCANF', 'malloc': 'MALLOC', 'printf': 'PRINTF'}
 tokens.append('ID')
+tokens += list(kw.values())
 
-data = '''
-printf('N');
-'''
+# zip_tokens = {tokens[i] : i for i in range(len(tokens))}
+# data = '''
+# printf('N');
+# malloc(33);
+# malloc(33);
+# //hello
+# 2 + 3 = 4;
+# printf('sdf')
+# '''
 
-lexer = lex.lex()
+# lexer = lex.lex()
 
-# Give the lexer some input
-lexer.input(data)
-
-print(list(lexer))
+# # Give the lexer some input
+# lexer.input(data)
+# x = list(lexer)
 
 # Tokenize
-for tok in lexer:
-    print(tok)
+# tokenized = [zip_tokens[tok.type] + 1 for tok in x]
+# print(tokenized)
+# print(zip_tokens)
+
+def TOK(someText):
+    lexer = lex.lex()
+    lexer.input(someText)
+    x = list(lexer)
+    d = {}
+    zip_tokens = {tokens[i]: i for i in range(len(tokens))}
+    for i in range(len(x) // 500 + 1):
+        print('Hi there')
+        d[(x[500 * i].lineno, x[500 * i].lexpos)] = [zip_tokens[tok.type] + 1 for tok in x[500 * i: min(500 * (i + 1), len(x))]]
+        d[(x[500 * i].lineno, x[500 * i].lexpos)] += (500 - len(d[(x[500 * i].lineno, x[500  * i].lexpos)])) * [0]
+
+    return d
+
+# s = """
+# #include<iostream>
+# #include<string>
+# using namespace std;
+# class User {
+#     public:
+#         User(string username, int password) {
+#             this->username = username;
+#             this->password = password;
+#             numUsers++;
+#             newestUser = *this;
+#         }
+#         public User() {
+#             cout << "wowowowow"
+#         }
+#         static void setDisplayNewest(bool displayNewest) {
+#             User::displayNewest = displayNewest;
+#         }
+#         static int getNumUsers() {
+#             return User::numUsers;
+#         }
+#         void getUsername() {
+#             std::string << " message " << 1999;
+#         }
+#         String getUsername() {
+#             return this->username;
+#         }
+#         static string getWelcomeMessage() {
+#             if (User::numUsers == 0) {
+#                 return "No user yet\n";
+#             } else if (User::displayNewest){
+#                 return newestUser.username + " has recently joined. Welcome him\n";
+#             } else {
+#                 return "Welcome! There" + numUsers + " people in the server\n";
+#             }
+#         }
+#         void changePassword(string usernameInput, int passwordInput, int newPassword) {
+#             if (validLogin(usernameInput, passwordInput)) {
+#                 this->password = newPassword;
+#             }
+#         }
+#         boolean validLogin(string usernameInput, int passwordInput) {
+#             return usernameInput == this->username && passwordInput == this->password;
+#         }
+#     private:
+#         string username;
+#         password;
+#         static int numUsers
+#         static User newestUser;
+#         static bool displayNewest;
+# };
+# int User::numUsers = 0;
+# User User::newestUser = NULL;
+# bool User::displayNewest = false;
+# int main() {
+#     std::string cool = "wowie" << 17 << "\n";
+#     //User User1(12, "1331");
+#     //User tim;
+#     int tim;
+#     std::cout << cool;
+# }
+# """
+# print(TOK(s))
