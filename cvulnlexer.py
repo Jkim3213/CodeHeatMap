@@ -151,7 +151,7 @@ def TOKfile(label, someText, fileName):
     else:
         line = b'\x00'
 
-    with open(fileName, "b+") as f:
+    with open(fileName, "ab") as f:
         line += b''.join(dick[list(dick.keys())[0]])
         f.write(line + '\n')
 
