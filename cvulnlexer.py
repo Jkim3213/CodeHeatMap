@@ -155,7 +155,7 @@ def TOKfile(label, someText, fileName):
 
     with open(fileName, "ab") as f:
         line += struct.pack('b' * len(dick[list(dick.keys())[0]]), *dick[list(dick.keys())[0]])
-        f.write(line + '\n')
+        f.write(line + b'\n')
 
     return
 
