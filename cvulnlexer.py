@@ -134,5 +134,9 @@ def TOK(someText):
     lexer = lex.lex()
     lexer.input(someText)
     x = list(lexer)
-    zip_tokens = {tokens[i] : i for i in range(len(tokens))}
-    tokenized = [zip_tokens[tok.type] + 1 for tok in x]
+    d = {}
+    for i in range(len(x) // 500):
+        d[(x[500 * i].lineno, x[500  * i].lexpos)] = [zip_tokens[tok.type] + 1 for tok in x[500 * i: min(500 * (i + 1), len(x))]]
+        d[(x[500 * i].lineno, x[500  * i].lexpos)] += (500 - len(d[(x[500 * i].lineno, x[500  * i].lexpos)]))  * [0]
+
+    return d
