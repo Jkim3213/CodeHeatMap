@@ -1,11 +1,1 @@
-# ML-based Software Vulnerability Detection
-
-## Motivation
-
-## Model
-
-## How to use
-
-## Files
-
-## References
+Please see [presentation](https://github.com/Jkim3213/CodeHeatMap/blob/master/HackMIT%202019.pdf) for details about the project. Also check out our [writeup](https://devpost.com/software/ml-based-software-vulnerability-detection).
