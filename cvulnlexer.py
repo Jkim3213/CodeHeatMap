@@ -37,9 +37,12 @@ tokens = [
 'FLOAT',       # dbl
 'CHAR',     #char
 'STRING',       #str
+'ID',
+'KW',
 
 'SEMI',     #;
-'COMMENT',  # --
+'COMMENTML',  # --
+'COMMENTSL'
 ]
 
 t_PLUS    = r'\+'
@@ -63,7 +66,8 @@ t_DOUBLEEQUAL = r'\=\='
 t_NE = r'\!\='
 t_AND = r'\&'
 t_OR = r'\|'
-t_COMMENT = r'\#.*'
+t_COMMENTML = r'/\*.*'
+t_COMMENTSL = r'//.*'
 t_SEMI = r';'
 t_ignore  = ' \t'
 
@@ -98,24 +102,37 @@ def t_error(t):
     
 def t_ID(t):
     r'[a-zA-Z_][a-zA-Z0-9]*'
+    t.type = kw.get(t.value,'ID')    # Check for keywords
     return t
     
-kw = {'if': 'IF', 'then': 'THEN', 'else': 'ELSE', 'while': 'WHILE', 'gets': 'GETS', 'scanf': 'SCANF', 'malloc': 'MALLOC', 'printf': 'PRINTF'}
-
-tokens += list(kw.values())
+kw = {'if': 'IF', 'then': 'THEN', 'else': 'ELSE', 'while': 'WHILE', 'gets': 'GETS', 'fgets': 'FGETS', 'getline': 'GETLINE', 'read': 'READ', 'scanf': 'SCANF', 'malloc': 'MALLOC', 'printf': 'PRINTF'}
 tokens.append('ID')
+tokens += list(kw.values())
 
-data = '''
-printf('N');
-'''
+# zip_tokens = {tokens[i] : i for i in range(len(tokens))}
+# data = '''
+# printf('N');
+# malloc(33);
+# malloc(33);
+# //hello
+# 2 + 3 = 4;
+# printf('sdf')
+# '''
 
-lexer = lex.lex()
+# lexer = lex.lex()
 
-# Give the lexer some input
-lexer.input(data)
-
-print(list(lexer))
+# # Give the lexer some input
+# lexer.input(data)
+# x = list(lexer)
 
 # Tokenize
-for tok in lexer:
-    print(tok)
+# tokenized = [zip_tokens[tok.type] + 1 for tok in x]
+# print(tokenized)
+# print(zip_tokens)
+
+def TOK(someText):
+    lexer = lex.lex()
+    lexer.input(someText)
+    x = list(lexer)
+    zip_tokens = {tokens[i] : i for i in range(len(tokens))}
+    tokenized = [zip_tokens[tok.type] + 1 for tok in x]
